@@ -1,4 +1,4 @@
-export type TabType = 'about' | 'experience' | 'education' | 'projects' | 'contact' | 'highlights';
+export type TabType = 'about' | 'experience' | 'education' | 'projects' | 'contact' | 'highlights' | 'links';
 
 export interface Accolade {
   id: string;

@@ -13,6 +13,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
     { id: 'education', label: 'Education' },
     { id: 'projects', label: 'Projects' },
     { id: 'contact', label: 'Contact' },
+    { id: 'links', label: 'Links' },
   ];
 
   const handleTabClick = (tab: TabType) => {

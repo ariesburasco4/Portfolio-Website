@@ -13,29 +13,66 @@ import { EducationScreen } from './components/EducationScreen';
 import { ProjectsScreen } from './components/ProjectsScreen';
 import { ContactScreen } from './components/ContactScreen';
 import { ResumeModal } from './components/ResumeModal';
+import { LinksScreen } from './components/LinksScreen';
+
+const resolveTabFromLocation = (): TabType => {
+  if (typeof window === 'undefined') return 'highlights';
+
+  const validTabs: TabType[] = ['highlights', 'about', 'experience', 'education', 'projects', 'contact', 'links'];
+
+  // 1. Check URL hash (e.g. #links, #/links, #projects)
+  const cleanHash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+  if (validTabs.includes(cleanHash as TabType)) {
+    return cleanHash === 'about' ? 'highlights' : (cleanHash as TabType);
+  }
+
+  // 2. Check query params (e.g. ?p=/links or ?tab=links)
+  const params = new URLSearchParams(window.location.search);
+  const pParam = params.get('p') || params.get('page') || params.get('tab');
+  if (pParam) {
+    const cleanParam = pParam.replace(/^\//, '').toLowerCase();
+    if (validTabs.includes(cleanParam as TabType)) {
+      return cleanParam === 'about' ? 'highlights' : (cleanParam as TabType);
+    }
+  }
+
+  // 3. Check pathname (e.g. /links, /links/, /<repo-name>/links, /<repo-name>/links/)
+  const pathname = window.location.pathname.toLowerCase().replace(/\/$/, '');
+  if (pathname.endsWith('/links')) {
+    return 'links';
+  }
+  for (const tab of validTabs) {
+    if (pathname.endsWith(`/${tab}`)) {
+      return tab === 'about' ? 'highlights' : tab;
+    }
+  }
+
+  return 'highlights';
+};
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<TabType>('highlights');
+  const [currentTab, setCurrentTab] = useState<TabType>(resolveTabFromLocation);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
-  // Sync tab with URL hash if available
+  // Sync tab with URL location/hash
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '') as TabType;
-      const validTabs: TabType[] = ['highlights', 'experience', 'education', 'projects', 'contact'];
-      if (validTabs.includes(hash)) {
-        setCurrentTab(hash);
-      }
+    const handleRouteSync = () => {
+      const detected = resolveTabFromLocation();
+      setCurrentTab(detected);
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    handleRouteSync();
+    window.addEventListener('hashchange', handleRouteSync);
+    window.addEventListener('popstate', handleRouteSync);
+    return () => {
+      window.removeEventListener('hashchange', handleRouteSync);
+      window.removeEventListener('popstate', handleRouteSync);
+    };
   }, []);
 
   const handleSelectTab = (tab: TabType) => {
     setCurrentTab(tab);
-    window.location.hash = tab;
+    window.location.hash = tab === 'highlights' ? 'about' : tab;
   };
 
   return (
@@ -66,6 +103,12 @@ export default function App() {
             <ContactScreen
               onNavigate={handleSelectTab}
               onRequestResume={() => setIsResumeModalOpen(true)}
+            />
+          )}
+          {currentTab === 'links' && (
+            <LinksScreen
+              onNavigate={handleSelectTab}
+              onOpenResume={() => setIsResumeModalOpen(true)}
             />
           )}
         </div>
