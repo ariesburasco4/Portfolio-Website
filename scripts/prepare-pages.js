@@ -30,13 +30,7 @@ if (!fs.existsSync(linksDir)) {
   fs.mkdirSync(linksDir, { recursive: true });
 }
 
-// Adjust relative asset paths if the build used relative './' base
-let linksHtmlContent = indexHtmlContent;
-linksHtmlContent = linksHtmlContent
-  .replace(/(src|href)="(\.\/assets\/)/g, '$1="../assets/')
-  .replace(/(src|href)="\.\/([a-zA-Z0-9_-]+\.[a-zA-Z0-9]+)"/g, '$1="../$2');
-
-fs.writeFileSync(path.join(linksDir, 'index.html'), linksHtmlContent, 'utf-8');
+fs.writeFileSync(path.join(linksDir, 'index.html'), indexHtmlContent, 'utf-8');
 console.log('✓ Created dist/links/index.html for direct /links access');
 
 // 3. Create .nojekyll in dist to bypass Jekyll processing on GitHub Pages

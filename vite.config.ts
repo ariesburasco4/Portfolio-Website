@@ -3,31 +3,15 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
-// Automatically determine base path for GitHub Pages or local environments
-const getBasePath = () => {
-  // 1. Explicit base path override via environment variable (e.g. BASE_PATH=/portfolio/)
-  if (process.env.BASE_PATH) {
-    return process.env.BASE_PATH.endsWith('/') ? process.env.BASE_PATH : `${process.env.BASE_PATH}/`;
-  }
-  // 2. Automatically derive base path in GitHub Actions environment
-  if (process.env.GITHUB_REPOSITORY) {
-    const parts = process.env.GITHUB_REPOSITORY.split('/');
-    const owner = parts[0];
-    const repo = parts[1];
-    // If repo matches <owner>.github.io, it is served at the domain root '/'
-    if (repo && owner && repo.toLowerCase() === `${owner.toLowerCase()}.github.io`) {
-      return '/';
-    }
-    // Otherwise it is a project repository served at '/<repo>/'
-    return `/${repo}/`;
-  }
-  // 3. Default to relative base path for local previews and standalone portability
-  return './';
-};
+export default defineConfig(({ command }) => {
+  // During local development (dev server on port 3000), serve from root '/'
+  // During build (GitHub Pages production deployment), use /Portfolio-Website/
+  const base = command === 'serve' 
+    ? '/' 
+    : (process.env.BASE_PATH ? (process.env.BASE_PATH.endsWith('/') ? process.env.BASE_PATH : `${process.env.BASE_PATH}/`) : '/Portfolio-Website/');
 
-export default defineConfig(() => {
   return {
-    base: getBasePath(),
+    base,
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
