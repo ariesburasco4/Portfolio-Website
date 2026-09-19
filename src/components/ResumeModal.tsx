@@ -20,7 +20,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
     const text = `
 ARIES BURASCO
 Procurement & Analytics Specialist | Master's in Information Systems Candidate
-Rogers, AR • ariesburasco4@gmail.com • linkedin.com/in/aries-burasco
+Rogers, AR • ariesburasco4@gmail.com • linkedin.com/in/aries-burasco-13168b290
 
 EDUCATION
 - Professional Master of Information Systems (GPA: 4.0/4.0)

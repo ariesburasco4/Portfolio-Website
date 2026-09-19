@@ -17,8 +17,8 @@ export const CANDIDATE_INFO = {
   location: 'Rogers, AR',
   affiliation: 'U of A Walton College of Business',
   email: 'ariesburasco4@gmail.com',
-  linkedin: 'linkedin.com/in/aries-burasco',
-  linkedinUrl: 'https://linkedin.com/in/aries-burasco',
+  linkedin: 'linkedin.com/in/aries-burasco-13168b290',
+  linkedinUrl: 'https://www.linkedin.com/in/aries-burasco-13168b290/',
   statusPill: 'OPEN TO ANALYTICS & PROCUREMENT ROLES',
   timezone: 'Northwest Arkansas (CST)',
   copyright: '© 2025 Aries Burasco • Sam M. Walton College of Business • Rogers, AR'
